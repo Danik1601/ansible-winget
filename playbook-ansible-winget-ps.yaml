@@ -4,7 +4,7 @@
   gather_facts: false
   become: true
   tasks:
-  #  - include_tasks: winget.yml
+    - include_tasks: winget.yml
 
     - name: Ensure Firefox is installed
       playbook-ansible-winget-ps:
