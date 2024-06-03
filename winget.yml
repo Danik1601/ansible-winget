@@ -1,5 +1,5 @@
 ---
-- name: Manage packages with Winget
+# - name: Manage packages with Winget
 #  hosts: all
   tasks:
     - name: Install package
