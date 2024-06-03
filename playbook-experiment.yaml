@@ -1,0 +1,8 @@
+---
+- name: Install applications using Winget
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Run a Powershell script on a Windows host
+      script: Resources/playbook-ansible-winget-ps.ps1
