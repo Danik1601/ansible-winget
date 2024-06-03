@@ -1,6 +1,6 @@
 ---
 - name: Manage packages with Winget
-  hosts: all
+#  hosts: all
   tasks:
     - name: Install package
       win_shell: powershell.exe -File %HOMEPATH%\Scripts\playbook-ansible-winget-ps.ps1 -action install -package "{{ package_name }}"
