@@ -8,16 +8,16 @@
 
     - name: Ensure Firefox is installed
       playbook-ansible-winget-ps:
-        package-name: Mozilla.Firefox
+        package: Mozilla.Firefox
         action: install
 
     - name: Ensure OneDrive is removed
       playbook-ansible-winget-ps:
-        package-name: Microsoft.OneDrive
+        package: Microsoft.OneDrive
         action: uninstall
 
     - name: Ensure ThunderBird is upgraded to the latest version
       playbook-ansible-winget-ps:
-        package-name: Mozilla.ThunderBird
+        package: Mozilla.ThunderBird
         action: install
 
