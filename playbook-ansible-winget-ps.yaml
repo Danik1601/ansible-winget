@@ -14,10 +14,10 @@
     - name: Ensure OneDrive is removed
       playbook-ansible-winget-ps:
         package-name: Microsoft.OneDrive
-        action: absent
+        action: uninstall
 
     - name: Ensure ThunderBird is upgraded to the latest version
       playbook-ansible-winget-ps:
         package-name: Mozilla.ThunderBird
-        action: present
+        action: install
 
