@@ -8,7 +8,7 @@
 
     - name: Ensure Firefox is installed
       playbook-ansible-winget-ps:
-        package: Mozilla.Firefox
+        packageName: Mozilla.Firefox
         action: install
 
     - name: Ensure OneDrive is removed
