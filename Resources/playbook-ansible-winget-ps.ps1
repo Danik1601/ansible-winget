@@ -11,11 +11,13 @@ function Install-Package {
     )
 
     Write-Host "Installing package $packageName..."
-    winget install --id $packageName --silent
+    winget install --id $packageName --silent --no-upgrade
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Package $packageName installed successfully."
-    } elseif ($LASTEXITCODE -eq -1978335189) {
+    } elseif ($LASTEXITCODE -eq -1978335135) {
         Write-Output "Already installed."
+    } elseif ($LASTEXITCODE -eq -1978335189) {
+        Write-Output "Already installed and upgraded."
     } else {
         Write-Host "Failed to install package $packageName."
     }
@@ -67,4 +69,3 @@ if ($action -eq "install") {
     Write-Host "Invalid action. Use 'install', 'uninstall' or 'update'."
 }
 
-echo $LASTEXITCODE
