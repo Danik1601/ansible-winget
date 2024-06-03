@@ -1,0 +1,23 @@
+---
+- name: Install applications using Winget
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - include_tasks: winget.yml
+
+    - name: Ensure Firefox is installed
+      module-ansible-winget:
+        package-name: Mozilla.Firefox
+        action: install
+
+    - name: Ensure OneDrive is removed
+      module-ansible-winget:
+        package-name: Microsoft.OneDrive
+        action: absent
+
+    - name: Ensure ThunderBird is upgraded to the latest version
+      module-ansible-winget:
+        package-name: Mozilla.ThunderBird
+        action: present
+
