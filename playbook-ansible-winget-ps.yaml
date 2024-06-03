@@ -7,17 +7,17 @@
     - include_tasks: winget.yml
 
     - name: Ensure Firefox is installed
-      module-ansible-winget:
+      playbook-ansible-winget-ps:
         package-name: Mozilla.Firefox
         action: install
 
     - name: Ensure OneDrive is removed
-      module-ansible-winget:
+      playbook-ansible-winget-ps:
         package-name: Microsoft.OneDrive
         action: absent
 
     - name: Ensure ThunderBird is upgraded to the latest version
-      module-ansible-winget:
+      playbook-ansible-winget-ps:
         package-name: Mozilla.ThunderBird
         action: present
 
