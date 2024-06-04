@@ -7,4 +7,4 @@
     - name: Run a Powershell script on a Windows host
       playbook-ansible-winget-ps:
         state: present
-        appID: git.git
+        appID: 7zip.7zip
