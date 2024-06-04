@@ -7,8 +7,8 @@
     - name: Run a Powershell script on a Windows host
       playbook-ansible-winget-ps:
         params:
-          - action: install
-          - package: git.git
+          action: install
+          package: git.git
 #      script: Resources/playbook-ansible-winget-ps.ps1 -action install -package Mozilla.Firefox
 #        args:
 #          - action: install
