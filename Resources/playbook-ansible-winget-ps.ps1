@@ -76,7 +76,7 @@ function Uninstall-Package {
     )
 
     Write-Host "Uninstalling package $packageID..."
-    if (Check_If_Installed -packageID $packageID) {
+    if (-not (Check_If_Installed -packageID $packageID)) {
         winget uninstall --id $packageID --silent
         if ($LASTEXITCODE -eq 0) {
             Write-Host "Package $packageID uninstalled successfully."
