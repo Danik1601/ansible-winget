@@ -27,7 +27,6 @@ function Check_If_Updatable {
 
     Write-Host "Checking $packageID..."
     return [int] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
-
 }
 
 # Функция для установки приложения через Winget

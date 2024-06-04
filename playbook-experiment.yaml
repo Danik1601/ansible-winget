@@ -5,4 +5,7 @@
   become: true
   tasks:
     - name: Run a Powershell script on a Windows host
-      script: Resources/playbook-ansible-winget-ps.ps1 -action install -package Mozilla.Firefox
+      playbook-ansible-winget-ps:
+#      script: Resources/playbook-ansible-winget-ps.ps1 -action install -package Mozilla.Firefox
+        action: install
+        package: Git.Git
