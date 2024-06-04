@@ -30,9 +30,11 @@ function Check_If_Installed {
         [string]$packageID
     )
 
-    Write-Host "Checking $packageID..."
+    Write-Output "Checking $packageID..."
     $InstalledApps = winget list
     return $InstalledApps -match $packageID
+
+    Write-Output "Installing package $packageID..."
 }
 
 # Функция для проверки наличия обновления через Winget
@@ -41,7 +43,7 @@ function Check_If_Updatable {
         [string]$packageID
     )
 
-    Write-Host "Checking $packageID..."
+    Write-Output "Checking $packageID..."
     return [int] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
@@ -51,21 +53,21 @@ function Install-Package {
         [string]$packageID
     )
 
-    Write-Host "Installing package $packageID..."
+    Write-Output "Installing package $packageID..."
     if (Check_If_Installed -packageID $packageID) {
         winget install --id $packageID --silent --no-upgrade
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "Package $packageID installed successfully."
+            Write-Output "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
             Write-Output "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
             Write-Output "Already installed and upgraded."
         } else {
-            Write-Host "Failed to install package $packageID."
+            Write-Output "Failed to install package $packageID."
         }
     }
     else {
-        Write-Host "Package $packageID is already Installed."
+        Write-Output "Package $packageID is already Installed."
     }
 }
 
@@ -75,19 +77,19 @@ function Uninstall-Package {
         [string]$packageID
     )
 
-    Write-Host "Uninstalling package $packageID..."
+    Write-Output "Uninstalling package $packageID..."
     if (-not (Check_If_Installed -packageID $packageID)) {
         winget uninstall --id $packageID --silent
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "Package $packageID uninstalled successfully."
+            Write-Output "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
             Write-Output "Already uninstalled."
         } else {
-            Write-Host "Failed to uninstall package $packageID."
+            Write-Output "Failed to uninstall package $packageID."
         }
     }
     else {
-        Write-Host "Package $packageID is already Uninstalled."
+        Write-Output "Package $packageID is already Uninstalled."
     }
 }
 
@@ -97,21 +99,21 @@ function Update-Package {
         [string]$packageID
     )
 
-    Write-Host "Updating package $packageID..."
+    Write-Output "Updating package $packageID..."
     if (Check_If_Updatable -packageID $packageID) {
         winget update --id $packageID --silent
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "Package $packageID updated successfully."
+            Write-Output "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
             Write-Output "Already updated."
         } elseif ($LASTEXITCODE -eq -1978335212) {
             Write-Output "This package is not installed."
         } else {
-            Write-Host "Failed to update package $packageID."
+            Write-Output "Failed to update package $packageID."
         }
     }
     else {
-        Write-Host "Package $packageID is already updated."
+        Write-Output "Package $packageID is already updated."
     }
 }
 
@@ -125,7 +127,7 @@ if ($state -eq "present") {
 } elseif ($state -eq "updated") {
     Update-Package -packageID $appID
 } else {
-    Write-Host "Invalid state. Use 'present', 'abscent' or 'updated'."
+    Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
 
 
