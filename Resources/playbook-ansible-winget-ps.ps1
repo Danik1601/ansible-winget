@@ -109,5 +109,5 @@ if ($action -eq "install") {
 } elseif ($action -eq "update") {
     Update-Package -packageID $package
 } else {
-    Write-Host "Invalid action. Use 'install', 'uninstall' or 'update'."
+    Write-Host "Invalid action. Use 'install', 'uninstall' or 'update'. used actiion: $action"
 }
