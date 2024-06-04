@@ -6,8 +6,13 @@
   tasks:
     - name: Run a Powershell script on a Windows host
       playbook-ansible-winget-ps:
+        action: "{{ action_name }}"
+        package: "{{ package_name }}"
+      vars:
+        action_name: "install"
+        package_name: "git.git"
 #      script: Resources/playbook-ansible-winget-ps.ps1 -action install -package Mozilla.Firefox
-        args:
-          - action: install
-          - package: Git.Git
+#        args:
+#          - action: install
+#          - package: Git.Git
 
