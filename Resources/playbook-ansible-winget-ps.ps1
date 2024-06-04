@@ -5,6 +5,15 @@
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSUseConsistentWhitespace',
+    '',
+    Justification = 'Relax whitespace rule for better readability in module spec',
+    Scope = 'function',
+    # Apply suppression specifically to module spec
+    Target = 'Get-ModuleSpec')]
+param()
+
 $spec = @{
     options = @{
         appID = @{ type = "str" }
@@ -34,7 +43,7 @@ function Check_If_Installed {
     $InstalledApps = winget list
     return $InstalledApps -match $packageID
 
-    Write-Output "Installing package $packageID..."
+    Write-Output ""
 }
 
 # Функция для проверки наличия обновления через Winget
