@@ -19,7 +19,7 @@ function Check_If_Installed {
     return $InstalledApps -match $packageID
 }
 
-# Функция для проверки наличия приложения через Winget
+# Функция для проверки наличия обновления через Winget
 function Check_If_Updatable {
     param (
         [string]$packageID
