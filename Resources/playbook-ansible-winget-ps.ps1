@@ -3,10 +3,26 @@
 # Имя модуля: winget.ps1
 # Этот модуль управляет приложениями через Winget на Windows-хосте
 
-param (
-    [string]$action,
-    [string]$package
-)
+#AnsibleRequires -CSharpUtil Ansible.Basic
+
+$spec = @{
+    options = @{
+        appID = @{ type = "str" }
+        state = @{ type = "str"; choices = "absent", "present", "updated" }
+    }
+  #  required_one_of = @(, @("appID", "state"))
+  #  supports_check_mode = $true
+  }
+  
+  $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+  
+  $appID = $module.Params.appID
+  $state = $module.Params.state
+
+# param (
+#     [string]$state,
+#     [string]$appID
+# )
 
 # Функция для проверки наличия приложения через Winget
 function Check_If_Installed {
@@ -102,12 +118,12 @@ function Update-Package {
 
 
 # Запуск функций в сответствии с переданными параметрами
-if ($action -eq "install") {
-    Install-Package -packageID $package
-} elseif ($action -eq "uninstall") {
-    Uninstall-Package -packageID $package
-} elseif ($action -eq "update") {
-    Update-Package -packageID $package
+if ($state -eq "present") {
+    Install-Package -packageID $appID
+} elseif ($state -eq "abscent") {
+    Uninstall-Package -packageID $appID
+} elseif ($state -eq "updated") {
+    Update-Package -packageID $appID
 } else {
-    Write-Host "Invalid action. Use 'install', 'uninstall' or 'update'. used actiion: $action"
+    Write-Host "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
