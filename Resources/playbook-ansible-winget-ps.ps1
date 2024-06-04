@@ -4,6 +4,9 @@
 # Этот модуль управляет приложениями через Winget на Windows-хосте
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
+#AnsibleRequires -PowerShell Ansible.ModuleUtils.AddType
+#Requires -Module Ansible.ModuleUtils.ArgvParser
+#Requires -Module Ansible.ModuleUtils.CommandUtil
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseConsistentWhitespace',
