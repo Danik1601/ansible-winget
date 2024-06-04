@@ -127,3 +127,6 @@ if ($state -eq "present") {
 } else {
     Write-Host "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
+
+
+echo $LASTEXITCODE
