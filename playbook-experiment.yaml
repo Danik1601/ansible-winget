@@ -6,5 +6,5 @@
   tasks:
     - name: Run a Powershell script on a Windows host
       playbook-ansible-winget-ps:
-        state: install
+        state: present
         appID: git.git
