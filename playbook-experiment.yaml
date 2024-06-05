@@ -1,5 +1,5 @@
 ---
-- name: Install applications using Winget
+- name: Manage applications using Winget
   hosts: all
   gather_facts: false
   become: true
@@ -8,3 +8,13 @@
       playbook-ansible-winget-ps:
         state: present
         appID: 7zip.7zip
+
+    - name: Install 7zip
+      playbook-ansible-winget-ps:
+        state: present
+        appID: Git.Git
+
+    - name: Install 7zip
+      playbook-ansible-winget-ps:
+        state: present
+        appID: Notepad++.Notepad++
