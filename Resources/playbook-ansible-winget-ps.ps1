@@ -1,5 +1,3 @@
-#!powershell
-
 # Имя модуля: winget.ps1
 # Этот модуль управляет приложениями через Winget на Windows-хосте
 
@@ -12,19 +10,13 @@ $spec = @{
         appID = @{ type = "str" }
         state = @{ type = "str"; choices = "absent", "present", "updated" }
     }
-#    required_one_of = @(, @("appID", "state"))
     supports_check_mode = $true
 }
   
-    $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
   
-    $appID = $module.Params.appID
-    $state = $module.Params.state
-
-# param (
-#     [string]$state,
-#     [string]$appID
-# )
+$appID = $module.Params.appID
+$state = $module.Params.state
 
 # Функция для проверки наличия приложения через Winget
 function Check_If_Installed {
@@ -54,23 +46,13 @@ function Install-Package {
     )
 
     Write-Output "Installing package $packageID..."
-    if (Check_If_Installed -packageID $packageID) {
-        winget install --id $packageID --silent --no-upgrade
-        Write-Output "Exit code: $LASTEXITCODE"
-
-        if ($?) {
-            Write-Output "Package $packageID installed successfully."
-            return 0
-        } elseif ($LASTEXITCODE -eq -1978335135) {
-            Write-Output "Already installed."
-        } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Output "Already installed and upgraded."
-        } else {
-            Write-Output "Failed to install package $packageID."
-        }
-    }
-    else {
-        Write-Output "Package $packageID is already Installed."
+    if (-not (Check_If_Installed -packageID $packageID)) {
+        $installResult = winget install --id $packageID --silent --no-upgrade 2>&1
+        Write-Host $installResult
+        return $LASTEXITCODE
+    } else {
+        Write-Output "Package $packageID is already installed."
+        return 0
     }
 }
 
@@ -81,18 +63,13 @@ function Uninstall-Package {
     )
 
     Write-Output "Uninstalling package $packageID..."
-    if (-not (Check_If_Installed -packageID $packageID)) {
-        winget uninstall --id $packageID --silent
-        if ($LASTEXITCODE -eq 0) {
-            Write-Output "Package $packageID uninstalled successfully."
-        } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Output "Already uninstalled."
-        } else {
-            Write-Output "Failed to uninstall package $packageID."
-        }
-    }
-    else {
-        Write-Output "Package $packageID is already Uninstalled."
+    if (Check_If_Installed -packageID $packageID) {
+        $uninstallResult = winget uninstall --id $packageID --silent 2>&1
+        Write-Output $uninstallResult
+        return $LASTEXITCODE
+    } else {
+        Write-Output "Package $packageID is not installed."
+        return 0
     }
 }
 
@@ -104,33 +81,43 @@ function Update-Package {
 
     Write-Output "Updating package $packageID..."
     if (Check_If_Updatable -packageID $packageID) {
-        winget update --id $packageID --silent
-        if ($LASTEXITCODE -eq 0) {
-            Write-Output "Package $packageID updated successfully."
-        } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Output "Already updated."
-        } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Output "This package is not installed."
-        } else {
-            Write-Output "Failed to update package $packageID."
-        }
-    }
-    else {
+        $updateResult = winget update --id $packageID --silent 2>&1
+        Write-Output $updateResult
+        return $LASTEXITCODE
+    } else {
         Write-Output "Package $packageID is already updated."
+        return 0
     }
 }
-
-
 
 # Запуск функций в сответствии с переданными параметрами
-if ($state -eq "present") {
-    Install-Package -packageID $appID
-} elseif ($state -eq "abscent") {
-    Uninstall-Package -packageID $appID
-} elseif ($state -eq "updated") {
-    Update-Package -packageID $appID
-} else {
-    Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
+try {
+    if ($state -eq "present") {
+        $exitCode = Install-Package -packageID $appID
+    } elseif ($state -eq "absent") {
+        $exitCode = Uninstall-Package -packageID $appID
+    } elseif ($state -eq "updated") {
+        $exitCode = Update-Package -packageID $appID
+    } else {
+        Write-Output "Invalid state. Use 'present', 'absent' or 'updated'."
+        $exitCode = 1
+    }
+
+    if ($exitCode -eq 0) {
+        $module.ExitJson(@{
+            changed = $true
+            exit_code = $exitCode
+            message = "Operation completed successfully."
+        })
+    } else {
+        $module.FailJson(@{
+            msg = "Operation failed with exit code $exitCode."
+            exit_code = $exitCode
+        })
+    }
+} catch {
+    $module.FailJson(@{
+        msg = $_.Exception.Message
+        exception = $_.Exception
+    })
 }
-
-
