@@ -141,4 +141,3 @@ if ($state -eq "present") {
 }
 
 
-echo [int64]$LASTEXITCODE
