@@ -60,15 +60,6 @@ function Install-Package {
     Write-Output "Installing package $packageID..."
     if (Check_If_Installed -packageID $packageID) {
         winget install --id $packageID --silent --no-upgrade
-        if ([int64]$LASTEXITCODE -eq 0) {
-            Write-Output "Package $packageID installed successfully."
-        } elseif ([int64]$LASTEXITCODE -eq -1978335135) {
-            Write-Output "Already installed."
-        } elseif ([int64]$LASTEXITCODE -eq -1978335189) {
-            Write-Output "Already installed and upgraded."
-        } else {
-            Write-Output "Failed to install package $packageID."
-        }
     }
     else {
         Write-Output "Package $packageID is already Installed."
@@ -84,13 +75,6 @@ function Uninstall-Package {
     Write-Output "Uninstalling package $packageID..."
     if (-not (Check_If_Installed -packageID $packageID)) {
         winget uninstall --id $packageID --silent
-        if ($LASTEXITCODE -eq 0) {
-            Write-Output "Package $packageID uninstalled successfully."
-        } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Output "Already uninstalled."
-        } else {
-            Write-Output "Failed to uninstall package $packageID."
-        }
     }
     else {
         Write-Output "Package $packageID is already Uninstalled."
@@ -106,15 +90,6 @@ function Update-Package {
     Write-Output "Updating package $packageID..."
     if (Check_If_Updatable -packageID $packageID) {
         winget update --id $packageID --silent
-        if ($LASTEXITCODE -eq 0) {
-            Write-Output "Package $packageID updated successfully."
-        } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Output "Already updated."
-        } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Output "This package is not installed."
-        } else {
-            Write-Output "Failed to update package $packageID."
-        }
     }
     else {
         Write-Output "Package $packageID is already updated."
