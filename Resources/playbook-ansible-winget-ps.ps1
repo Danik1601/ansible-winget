@@ -17,12 +17,12 @@ $spec = @{
     }
 #    required_one_of = @(, @("appID", "state"))
 #    supports_check_mode = $true
-  }
+}
   
-  $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+    $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
   
-   $appID = $module.Params.appID
-   $state = $module.Params.state
+    $appID = $module.Params.appID
+    $state = $module.Params.state
 
 # param (
 #     [string]$state,
