@@ -8,10 +8,7 @@
 #Requires -Module Ansible.ModuleUtils.ArgvParser
 #Requires -Module Ansible.ModuleUtils.CommandUtil
 
-param (
-    [string]$state,
-    [string]$appID
-)
+param()
 
 $spec = @{
     options = @{
