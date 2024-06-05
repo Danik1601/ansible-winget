@@ -132,4 +132,4 @@ if ($state -eq "present") {
 }
 
 
-$module.ExitJson()
+$module.ExitJson($LASTEXITCODE)
