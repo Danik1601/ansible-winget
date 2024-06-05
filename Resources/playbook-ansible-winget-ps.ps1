@@ -56,7 +56,6 @@ function Install-Package {
     Write-Output "Installing package $packageID..."
     if (Check_If_Installed -packageID $packageID) {
         winget install --id $packageID --silent --no-upgrade
-        Write-Output "Exit code: $LASTEXITCODE"
         if ($?) {
             Write-Output "Package $packageID installed successfully."
             return $?
@@ -82,7 +81,7 @@ function Uninstall-Package {
     Write-Output "Uninstalling package $packageID..."
     if (-not (Check_If_Installed -packageID $packageID)) {
         winget uninstall --id $packageID --silent
-        if ($LASTEXITCODE -eq 0) {
+        if ($?) {
             Write-Output "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
             Write-Output "Already uninstalled."
@@ -104,7 +103,7 @@ function Update-Package {
     Write-Output "Updating package $packageID..."
     if (Check_If_Updatable -packageID $packageID) {
         winget update --id $packageID --silent
-        if ($LASTEXITCODE -eq 0) {
+        if ($?) {
             Write-Output "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
             Write-Output "Already updated."
