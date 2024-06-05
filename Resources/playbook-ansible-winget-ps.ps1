@@ -131,5 +131,6 @@ if ($state -eq "present") {
     Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
 
+$exit_code = $LASTEXITCODE
 
-$module.ExitJson($LASTEXITCODE)
+$module.ExitJson($exit_code)
