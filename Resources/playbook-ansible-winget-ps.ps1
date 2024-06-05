@@ -3,14 +3,21 @@
 # Имя модуля: winget.ps1
 # Этот модуль управляет приложениями через Winget на Windows-хосте
 
-#AnsibleRequires -CSharpUtil Ansible.Basic
+#AnsibleRequires -PowerShell Ansible.Basic
 #AnsibleRequires -PowerShell Ansible.ModuleUtils.AddType
 #Requires -Module Ansible.ModuleUtils.ArgvParser
 #Requires -Module Ansible.ModuleUtils.CommandUtil
 
 param()
 
-
+$spec = @{
+    options = @{
+        appID = @{ type = "str" }
+        state = @{ type = "str"; choices = "absent", "present", "updated" }
+    }
+#    required_one_of = @(, @("appID", "state"))
+#    supports_check_mode = $true
+}
   
     $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
   
