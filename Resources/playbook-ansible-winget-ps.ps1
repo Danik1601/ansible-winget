@@ -60,7 +60,6 @@ function Install-Package {
 
         if ($?) {
             Write-Output "Package $packageID installed successfully."
-            return 0
         } elseif ($LASTEXITCODE -eq -1978335135) {
             Write-Output "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
@@ -123,7 +122,6 @@ function Update-Package {
 
 
 # Запуск функций в сответствии с переданными параметрами
-try {
 if ($state -eq "present") {
     Install-Package -packageID $appID
 } elseif ($state -eq "abscent") {
@@ -135,21 +133,3 @@ if ($state -eq "present") {
 }
 
 
-if ($LASTEXITCODE -eq 0) {
-    $module.ExitJson(@{
-        changed = $true
-
-        message = "Operation completed successfully."
-    })
-} else {
-    $module.FailJson(@{
-        msg = "Operation failed with exit code $LASTEXITCODE."
-    })
-}
-} catch {
-$module.FailJson(@{
-    msg = $_.Exception.Message
-    exception = $_.Exception
-})
-
-}
