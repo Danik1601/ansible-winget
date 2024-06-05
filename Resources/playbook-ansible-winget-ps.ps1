@@ -56,6 +56,7 @@ function Install-Package {
     Write-Output "Installing package $packageID..."
     if (Check_If_Installed -packageID $packageID) {
         winget install --id $packageID --silent --no-upgrade
+        Write-Output "Exit code: $LASTEXITCODE"
         if ($?) {
             Write-Output "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
