@@ -147,4 +147,7 @@ if ($state -eq "present") {
     $exitCode = $EXIT_CODE_INVALID_STATE
 }
 
+# Ensure exitCode is a single integer value
+$exitCode = [int]$exitCode
+
 $host.SetShouldExit($exitCode)
