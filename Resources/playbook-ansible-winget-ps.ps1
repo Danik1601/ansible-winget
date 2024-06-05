@@ -8,13 +8,7 @@
 #Requires -Module Ansible.ModuleUtils.ArgvParser
 #Requires -Module Ansible.ModuleUtils.CommandUtil
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-    'PSUseConsistentWhitespace',
-    '',
-    Justification = 'Relax whitespace rule for better readability in module spec',
-    Scope = 'function',
-    # Apply suppression specifically to module spec
-    Target = 'Get-ModuleSpec')]
+
 param()
 
 $spec = @{
