@@ -26,7 +26,7 @@ $spec = @{
    supports_check_mode = $true
   }
   
-  $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+  $module = [Ansible.Basic.AnsibleModule]::Create($spec)
   
   $appID = $module.Params.appID
   $state = $module.Params.state
