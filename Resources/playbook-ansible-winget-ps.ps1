@@ -26,7 +26,7 @@ $spec = @{
    supports_check_mode = $true
   }
   
-  $module = [Ansible.Basic.AnsibleModule]::Create($spec)
+  $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
   
   $appID = $module.Params.appID
   $state = $module.Params.state
@@ -66,15 +66,7 @@ function Install-Package {
     Write-Output "Installing package $packageID..."
     if (Check_If_Installed -packageID $packageID) {
         winget install --id $packageID --silent --no-upgrade
-        if ($LASTEXITCODE -eq 0) {
-            Write-Output "Package $packageID installed successfully."
-        } elseif ($LASTEXITCODE -eq -1978335135) {
-            Write-Output "Already installed."
-        } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Output "Already installed and upgraded."
-        } else {
-            Write-Output "Failed to install package $packageID."
-        }
+
     }
     else {
         Write-Output "Package $packageID is already Installed."
