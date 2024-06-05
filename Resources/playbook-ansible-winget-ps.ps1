@@ -3,7 +3,7 @@
 # Имя модуля: winget.ps1
 # Этот модуль управляет приложениями через Winget на Windows-хосте
 
-#AnsibleRequires -PowerShell Ansible.Basic
+#Requires -Module Ansible.Basic
 #AnsibleRequires -PowerShell Ansible.ModuleUtils.AddType
 #Requires -Module Ansible.ModuleUtils.ArgvParser
 #Requires -Module Ansible.ModuleUtils.CommandUtil
