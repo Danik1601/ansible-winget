@@ -8,8 +8,6 @@
       playbook-ansible-winget-ps:
         state: present
         appID: 7zip.7zip
-        vars:
-          ansible_command_timeout: 30
 
     - name: Install 7zip
       playbook-ansible-winget-ps:
