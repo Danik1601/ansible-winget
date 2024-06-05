@@ -134,6 +134,13 @@ if ($state -eq "present") {
 }
 
 
-# Convert the exit code to Int64 before setting it
-$exitCode = [int64]$LASTEXITCODE
+# Normalize the exit code to fit within Int32 range
+if ($LASTEXITCODE -gt [int]::MaxValue) {
+    $exitCode = [int]::MaxValue
+} elseif ($LASTEXITCODE -lt [int]::MinValue) {
+    $exitCode = [int]::MinValue
+} else {
+    $exitCode = [int]$LASTEXITCODE
+}
+
 $host.SetShouldExit($exitCode)
