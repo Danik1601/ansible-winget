@@ -46,7 +46,7 @@ function Check_If_Installed {
     $InstalledApps = winget list
     return $InstalledApps -match $packageID
 
-    Write-Output "$LASTEXITCODE"
+    Write-Output [int64]$LASTEXITCODE
 }
 
 # Функция для проверки наличия обновления через Winget
@@ -143,4 +143,4 @@ if ($state -eq "present") {
 }
 
 
-echo $LASTEXITCODE
+echo [int64]$LASTEXITCODE
