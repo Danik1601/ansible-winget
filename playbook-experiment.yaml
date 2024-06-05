@@ -8,13 +8,6 @@
       playbook-ansible-winget-ps:
         state: present
         appID: 7zip.7zip
+      async: 360
+      poll: 60
 
-    - name: Install 7zip
-      playbook-ansible-winget-ps:
-        state: present
-        appID: Git.Git
-
-    - name: Install 7zip
-      playbook-ansible-winget-ps:
-        state: present
-        appID: Notepad++.Notepad++
