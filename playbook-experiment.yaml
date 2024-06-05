@@ -11,3 +11,16 @@
       async: 360
       poll: 30
 
+    - name: Install Git
+      playbook-ansible-winget-ps:
+        state: present
+        appID: Git.Git
+      async: 360
+      poll: 30
+
+    - name: Install Notepad++
+      playbook-ansible-winget-ps:
+        state: present
+        appID: Notepad++.Notepad++
+      async: 360
+      poll: 30
