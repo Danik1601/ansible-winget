@@ -137,17 +137,17 @@ function Update-Package {
 
 # Запуск функций в сответствии с переданными параметрами
 if ($state -eq "present") {
-    $exitCode = Install-Package -packageID $appID
+    $exitCode = (Install-Package -packageID $appID)
 } elseif ($state -eq "absent") {
-    $exitCode = Uninstall-Package -packageID $appID
+    $exitCode = (Uninstall-Package -packageID $appID)
 } elseif ($state -eq "updated") {
-    $exitCode = Update-Package -packageID $appID
+    $exitCode = (Update-Package -packageID $appID)
 } else {
     Write-Output "Invalid state. Use 'present', 'absent' or 'updated'."
     $exitCode = $EXIT_CODE_INVALID_STATE
 }
 
 # Ensure exitCode is a single integer value
-$exitCode = [int]$exitCode
+$exitCode = [int]$exitCode[0]
 
 $host.SetShouldExit($exitCode)
