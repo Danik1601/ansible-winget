@@ -105,10 +105,18 @@ try {
         $exitCode = 1
     }
 
-    $module.ExitJson(@{
-        changed = $true
-        exit_code = $exitCode
-    })
+    if ($exitCode -eq 0) {
+        $module.ExitJson(@{
+            changed = $true
+            exit_code = $exitCode
+            message = "Operation completed successfully."
+        })
+    } else {
+        $module.FailJson(@{
+            msg = "Operation failed with exit code $exitCode."
+            exit_code = $exitCode
+        })
+    }
 } catch {
     $module.FailJson(@{
         msg = $_.Exception.Message
