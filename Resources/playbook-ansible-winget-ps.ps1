@@ -21,8 +21,8 @@ $spec = @{
   
   $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
   
-#   $appID = $module.Params.appID
-#   $state = $module.Params.state
+   $appID = $module.Params.appID
+   $state = $module.Params.state
 
 # param (
 #     [string]$state,
