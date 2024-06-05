@@ -57,7 +57,7 @@ function Install-Package {
     if (Check_If_Installed -packageID $packageID) {
         winget install --id $packageID --silent --no-upgrade
         Write-Output "Exit code: $LASTEXITCODE"
-        $Ansible.Changed = $true
+        Write-Output "Exit code: $Ansible.Result"
         if ($?) {
             Write-Output "Package $packageID installed successfully."
             exit 0
