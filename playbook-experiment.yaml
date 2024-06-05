@@ -9,18 +9,18 @@
         state: present
         appID: 7zip.7zip
       async: 360
-      poll: 30
+      poll: 15
 
     - name: Install Git
       playbook-ansible-winget-ps:
         state: present
         appID: Git.Git
       async: 360
-      poll: 30
+      poll: 15
 
     - name: Install Notepad++
       playbook-ansible-winget-ps:
         state: present
         appID: Notepad++.Notepad++
       async: 360
-      poll: 30
+      poll: 15
