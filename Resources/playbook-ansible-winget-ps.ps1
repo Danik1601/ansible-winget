@@ -60,7 +60,7 @@ function Install-Package {
 
         if ($?) {
             Write-Output "Package $packageID installed successfully."
-            exit 0
+
         } elseif ($LASTEXITCODE -eq -1978335135) {
             Write-Output "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
