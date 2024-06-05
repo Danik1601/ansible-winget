@@ -1,4 +1,4 @@
-#!powershell
+# PowerShell
 
 # Имя модуля: winget.ps1
 # Этот модуль управляет приложениями через Winget на Windows-хосте
@@ -15,19 +15,23 @@ $spec = @{
         appID = @{ type = "str" }
         state = @{ type = "str"; choices = "absent", "present", "updated" }
     }
-  #  required_one_of = @(, @("appID", "state"))
-  #  supports_check_mode = $true
-  }
-  
-  $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
-  
-  $appID = $module.Params.appID
-  $state = $module.Params.state
+    # required_one_of = @(, @("appID", "state"))
+    # supports_check_mode = $true
+}
 
-# param (
-#     [string]$state,
-#     [string]$appID
-# )
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+
+$appID = $module.Params.appID
+$state = $module.Params.state
+
+# Define custom exit codes
+$EXIT_CODE_SUCCESS = 0
+$EXIT_CODE_ALREADY_PRESENT = 1
+$EXIT_CODE_ALREADY_ABSENT = 2
+$EXIT_CODE_INSTALL_FAILED = 10
+$EXIT_CODE_UNINSTALL_FAILED = 20
+$EXIT_CODE_UPDATE_FAILED = 30
+$EXIT_CODE_INVALID_STATE = 40
 
 # Функция для проверки наличия приложения через Winget
 function Check_If_Installed {
@@ -57,20 +61,22 @@ function Install-Package {
     )
 
     Write-Output "Installing package $packageID..."
-    if (Check_If_Installed -packageID $packageID) {
+    if (-not (Check_If_Installed -packageID $packageID)) {
         winget install --id $packageID --silent --no-upgrade
         if ($LASTEXITCODE -eq 0) {
             Write-Output "Package $packageID installed successfully."
+            return $EXIT_CODE_SUCCESS
         } elseif ($LASTEXITCODE -eq -1978335135) {
             Write-Output "Already installed."
-        } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Output "Already installed and upgraded."
+            return $EXIT_CODE_ALREADY_PRESENT
         } else {
             Write-Output "Failed to install package $packageID."
+            return $EXIT_CODE_INSTALL_FAILED
         }
     }
     else {
         Write-Output "Package $packageID is already Installed."
+        return $EXIT_CODE_ALREADY_PRESENT
     }
 }
 
@@ -81,18 +87,22 @@ function Uninstall-Package {
     )
 
     Write-Output "Uninstalling package $packageID..."
-    if (-not (Check_If_Installed -packageID $packageID)) {
+    if (Check_If_Installed -packageID $packageID) {
         winget uninstall --id $packageID --silent
         if ($LASTEXITCODE -eq 0) {
             Write-Output "Package $packageID uninstalled successfully."
+            return $EXIT_CODE_SUCCESS
         } elseif ($LASTEXITCODE -eq -1978335212) {
             Write-Output "Already uninstalled."
+            return $EXIT_CODE_ALREADY_ABSENT
         } else {
             Write-Output "Failed to uninstall package $packageID."
+            return $EXIT_CODE_UNINSTALL_FAILED
         }
     }
     else {
         Write-Output "Package $packageID is already Uninstalled."
+        return $EXIT_CODE_ALREADY_ABSENT
     }
 }
 
@@ -107,40 +117,34 @@ function Update-Package {
         winget update --id $packageID --silent
         if ($LASTEXITCODE -eq 0) {
             Write-Output "Package $packageID updated successfully."
+            return $EXIT_CODE_SUCCESS
         } elseif ($LASTEXITCODE -eq -1978335189) {
             Write-Output "Already updated."
+            return $EXIT_CODE_SUCCESS
         } elseif ($LASTEXITCODE -eq -1978335212) {
             Write-Output "This package is not installed."
+            return $EXIT_CODE_ALREADY_ABSENT
         } else {
             Write-Output "Failed to update package $packageID."
+            return $EXIT_CODE_UPDATE_FAILED
         }
     }
     else {
         Write-Output "Package $packageID is already updated."
+        return $EXIT_CODE_SUCCESS
     }
 }
 
-
-
 # Запуск функций в сответствии с переданными параметрами
 if ($state -eq "present") {
-    Install-Package -packageID $appID
-} elseif ($state -eq "abscent") {
-    Uninstall-Package -packageID $appID
+    $exitCode = Install-Package -packageID $appID
+} elseif ($state -eq "absent") {
+    $exitCode = Uninstall-Package -packageID $appID
 } elseif ($state -eq "updated") {
-    Update-Package -packageID $appID
+    $exitCode = Update-Package -packageID $appID
 } else {
-    Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
-}
-
-
-# Normalize the exit code to fit within Int32 range
-if ($LASTEXITCODE -gt [int]::MaxValue) {
-    $exitCode = [int]::MaxValue
-} elseif ($LASTEXITCODE -lt [int]::MinValue) {
-    $exitCode = [int]::MinValue
-} else {
-    $exitCode = [int]$LASTEXITCODE
+    Write-Output "Invalid state. Use 'present', 'absent' or 'updated'."
+    $exitCode = $EXIT_CODE_INVALID_STATE
 }
 
 $host.SetShouldExit($exitCode)
