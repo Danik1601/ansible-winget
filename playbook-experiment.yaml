@@ -4,7 +4,7 @@
   gather_facts: false
   become: true
   tasks:
-    - name: Run a Powershell script on a Windows host
+    - name: Install 7zip
       playbook-ansible-winget-ps:
         state: present
         appID: 7zip.7zip
