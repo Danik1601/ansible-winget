@@ -15,14 +15,14 @@ $spec = @{
         appID = @{ type = "str" }
         state = @{ type = "str"; choices = "absent", "present", "updated" }
     }
-  #  required_one_of = @(, @("appID", "state"))
-  #  supports_check_mode = $true
+#    required_one_of = @(, @("appID", "state"))
+#    supports_check_mode = $true
   }
   
   $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
   
-  $appID = $module.Params.appID
-  $state = $module.Params.state
+#   $appID = $module.Params.appID
+#   $state = $module.Params.state
 
 # param (
 #     [string]$state,
