@@ -15,16 +15,11 @@ $spec = @{
 #    required_one_of = @(, @("appID", "state"))
     supports_check_mode = $true
 }
-  
+
     $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
-  
+
     $appID = $module.Params.appID
     $state = $module.Params.state
-
-# param (
-#     [string]$state,
-#     [string]$appID
-# )
 
 # Функция для проверки наличия приложения через Winget
 function Check_If_Installed {
@@ -58,7 +53,6 @@ function Install-Package {
         winget install --id $packageID --silent --no-upgrade
         if ($?) {
             Write-Output "Package $packageID installed successfully."
-            return $?
         } elseif ($LASTEXITCODE -eq -1978335135) {
             Write-Output "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
@@ -99,7 +93,7 @@ function Update-Package {
     param (
         [string]$packageID
     )
-
+    
     Write-Output "Updating package $packageID..."
     if (Check_If_Updatable -packageID $packageID) {
         winget update --id $packageID --silent
