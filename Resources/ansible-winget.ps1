@@ -1,7 +1,7 @@
 #!powershell
 
 # Имя модуля: ansible-winget.ps1
-# Этот модуль управляет приложениями через Winget на Windows-хосте
+# Этот модуль управляет приложениями через Winget на управляемом Windows-узле
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
