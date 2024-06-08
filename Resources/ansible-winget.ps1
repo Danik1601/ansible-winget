@@ -130,7 +130,7 @@ if ($state -eq "present") {
 $result = @{
     changed = $false
     msg = "Задача выполнена успешно"
-    failed = false
+    failed = $false
 }
 
 Write-Output (ConvertTo-Json $result)
