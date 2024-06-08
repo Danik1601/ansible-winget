@@ -125,7 +125,6 @@ if ($state -eq "present") {
     Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
 
-$LASTEXITCODE = 0
-exit
+$host.SetShouldExit(0)
 
 $module.ExitJson()
