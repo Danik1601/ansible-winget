@@ -20,9 +20,9 @@
       async: 360
       poll: 15
 
-    - name: Install Notepad++
+    - name: Install Mozilla Thunderbird
       ansible-winget:
         state: present
-        appID: Notepad++.Notepad++
+        appID: Mozilla.Thunderbird
       async: 360
       poll: 15
