@@ -52,8 +52,7 @@ function Install-Package {
     if (Check_If_Installed -packageID $packageID) {
         winget install --id $packageID --silent --no-upgrade
         if ($?) {
-        #    Write-Output "Package $packageID installed successfully."
-            Write-Output '{"changed": false, "msg": "Задача выполнена успешно", "failed": false}'
+            Write-Output "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
             Write-Output "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
@@ -126,13 +125,7 @@ if ($state -eq "present") {
     Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
 
-# Задача выполнена успешно
-$result = @{
-    changed = $false
-    msg = "Задача выполнена успешно"
-    failed = $false
-}
+$LASTEXITCODE = 0
+exit
 
-Write-Output (ConvertTo-Json $result)
-
-# $module.ExitJson()
+$module.ExitJson()
