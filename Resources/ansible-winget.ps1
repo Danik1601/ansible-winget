@@ -126,4 +126,12 @@ if ($state -eq "present") {
     Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
 
-$module.ExitJson()
+# Задача выполнена успешно
+$result = @{
+    changed = $false
+    msg = "Задача выполнена успешно"
+}
+
+Write-Output (ConvertTo-Json $result)
+
+# $module.ExitJson()
