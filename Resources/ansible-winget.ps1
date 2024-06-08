@@ -50,8 +50,9 @@ function Install-Package {
 
     Write-Output "Installing package $packageID..."
     if (Check_If_Installed -packageID $packageID) {
-        winget install --id $packageID --silent --no-upgrade
+        $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
+            $output = 0
             Write-Output "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
             Write-Output "Already installed."
@@ -125,6 +126,5 @@ if ($state -eq "present") {
     Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
 
-$host.SetShouldExit(0)
 
 $module.ExitJson()
