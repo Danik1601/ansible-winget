@@ -117,12 +117,12 @@ function Update-Package {
 # Запуск функций в сответствии с переданными параметрами
 if ($state -eq "present") {
     Install-Package -packageID $appID
-} elseif ($state -eq "abscent") {
+} elseif ($state -eq "absent") {
     Uninstall-Package -packageID $appID
 } elseif ($state -eq "updated") {
     Update-Package -packageID $appID
 } else {
-    Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
+    Write-Output "Invalid state. Use 'present', 'absent' or 'updated'."
 }
 
 
