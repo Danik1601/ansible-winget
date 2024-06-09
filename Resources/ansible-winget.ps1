@@ -85,7 +85,8 @@ function Uninstall-Package {
         }
     }
     else {
-        Write-Output "Package $packageID is already Uninstalled."
+        # Write-Output "Package $packageID is already Uninstalled."
+        return 0
     }
 }
 
@@ -109,7 +110,8 @@ function Update-Package {
         }
     }
     else {
-        Write-Output "Package $packageID is already updated."
+        # Write-Output "Package $packageID is already updated."
+        return 0
     }
 }
 
