@@ -55,7 +55,7 @@ function Install-Package {
     #        $output = 0
             # Write-Output "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
-            Write-Output "Already installed. $LASTEXITCODE"
+            # Write-Output "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
             # Write-Output "Already installed and upgraded."
         } else {
