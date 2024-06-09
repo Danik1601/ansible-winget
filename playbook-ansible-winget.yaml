@@ -8,7 +8,7 @@
   
     - name: Install 7zip
       ansible-winget:
-        state: present
+        state: absent
         appID: 7zip.7zip
       async: 360
       poll: 15
