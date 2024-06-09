@@ -52,7 +52,6 @@ function Install-Package {
     if (Check_If_Installed -packageID $packageID) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
-    #        $output = 0
             # Write-Output "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
             # Write-Output "Already installed."
@@ -75,11 +74,11 @@ function Uninstall-Package {
 
     Write-Output "Uninstalling package $packageID..."
     if (-not (Check_If_Installed -packageID $packageID)) {
-        winget uninstall --id $packageID --silent
+        $output = winget uninstall --id $packageID --silent
         if ($?) {
-            Write-Output "Package $packageID uninstalled successfully."
+            # Write-Output "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Output "Already uninstalled."
+            # Write-Output "Already uninstalled."
         } else {
             Write-Output "Failed to uninstall package $packageID."
         }
@@ -97,13 +96,13 @@ function Update-Package {
     
     Write-Output "Updating package $packageID..."
     if (Check_If_Updatable -packageID $packageID) {
-        winget update --id $packageID --silent
+        $output = winget update --id $packageID --silent
         if ($?) {
-            Write-Output "Package $packageID updated successfully."
+            # Write-Output "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Output "Already updated."
+            # Write-Output "Already updated."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Output "This package is not installed."
+            # Write-Output "This package is not installed."
         } else {
             Write-Output "Failed to update package $packageID."
         }
@@ -125,6 +124,7 @@ if ($state -eq "present") {
 } else {
     Write-Output "Invalid state. Use 'present', 'abscent' or 'updated'."
 }
+
 
 
 $module.ExitJson()
