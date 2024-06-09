@@ -73,7 +73,7 @@ function Uninstall-Package {
         [string]$packageID
     )
 
-    Write-Output "Uninstalling package $packageID..."
+    # Write-Output "Uninstalling package $packageID..."
     if (Check_If_Installed -packageID $packageID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
@@ -95,7 +95,7 @@ function Update-Package {
         [string]$packageID
     )
     
-    Write-Output "Updating package $packageID..."
+    # Write-Output "Updating package $packageID..."
     if (Check_If_Updatable -packageID $packageID) {
         $output = winget update --id $packageID --silent
         if ($?) {
