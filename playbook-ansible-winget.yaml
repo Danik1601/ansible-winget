@@ -15,14 +15,14 @@
 
     - name: Install Git
       ansible-winget:
-        state: present
+        state: abscent
         appID: Git.Git
       async: 360
       poll: 15
 
     - name: Install Mozilla Thunderbird
       ansible-winget:
-        state: present
+        state: updated
         appID: Mozilla.Thunderbird
       async: 360
       poll: 15
