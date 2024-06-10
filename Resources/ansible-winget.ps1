@@ -62,7 +62,7 @@ function Install-Package {
         }
     }
     else {
-        # Write-Output "Package $packageID is already Installed."
+        Write-Output "Package $packageID is already Installed."
     }
 }
 
@@ -73,7 +73,7 @@ function Uninstall-Package {
     )
 
     # Write-Output "Uninstalling package $packageID..."
-    if (-not (Check_If_Installed -packageID $packageID)) {
+    if (Check_If_Installed -packageID $packageID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
             # Write-Output "Package $packageID uninstalled successfully."
