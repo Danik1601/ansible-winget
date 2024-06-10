@@ -28,7 +28,7 @@ function Check_If_Installed {
     )
 
     Write-Output "Checking $packageID..."
-    $InstalledApps = winget list $packageID
+    winget list $packageID
     # return $InstalledApps -match $packageID
 }
 
