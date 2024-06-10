@@ -76,9 +76,9 @@ function Uninstall-Package {
     if (Check_If_Installed -packageID $packageID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
-            # Write-Output "Package $packageID uninstalled successfully."
+            Write-Output "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            # Write-Output "Already uninstalled."
+            Write-Output "Already uninstalled."
         } else {
             Write-Output "Failed to uninstall package $packageID."
         }
