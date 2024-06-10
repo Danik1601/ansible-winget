@@ -49,7 +49,7 @@ function Install-Package {
     )
 
     # Write-Output "Installing package $packageID..."
-    if (-not (Check_If_Installed -packageID $appID)) {
+    if (Check_If_Installed -packageID $appID) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
             Write-Output "Package $packageID installed successfully."
