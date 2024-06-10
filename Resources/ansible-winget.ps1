@@ -49,20 +49,21 @@ function Install-Package {
     )
 
     # Write-Output "Installing package $packageID..."
-    if (-not (Check_If_Installed -packageID $packageID)) {
+    if (-not (Check_If_Installed -packageID $appID)) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
-            # Write-Output "Package $packageID installed successfully."
+            Write-Output "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
-            # Write-Output "Already installed."
+            Write-Output "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
-            # Write-Output "Already installed and upgraded."
+            Write-Output "Already installed and upgraded."
         } else {
             Write-Output "Failed to install package $packageID."
         }
     }
     else {
-        # Write-Output "Package $packageID is already Installed."
+        Write-Output "Package $packageID is already Installed."
+        # return 0
     }
 }
 
@@ -73,7 +74,7 @@ function Uninstall-Package {
     )
 
     # Write-Output "Uninstalling package $packageID..."
-    if (Check_If_Installed -packageID $packageID) {
+    if (Check_If_Installed -packageID $appID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
             Write-Output "Package $packageID uninstalled successfully."
@@ -96,21 +97,21 @@ function Update-Package {
     )
     
     # Write-Output "Updating package $packageID..."
-    if (Check_If_Updatable -packageID $packageID) {
+    if (Check_If_Updatable -packageID $appID) {
         $output = winget update --id $packageID --silent
         if ($?) {
-            # Write-Output "Package $packageID updated successfully."
+            Write-Output "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
-            # Write-Output "Already updated."
+            Write-Output "Already updated."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            # Write-Output "This package is not installed."
+            Write-Output "This package is not installed."
         } else {
             Write-Output "Failed to update package $packageID."
         }
     }
     else {
-        # Write-Output "Package $packageID is already updated."
-        return 0
+        Write-Output "Package $packageID is already updated."
+        # return 0
     }
 }
 
