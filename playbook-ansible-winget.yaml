@@ -2,7 +2,7 @@
 - name: Manage applications using Winget
   hosts: all
   gather_facts: false
-  become: true
+
 
   tasks:
   
