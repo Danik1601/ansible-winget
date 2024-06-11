@@ -36,7 +36,7 @@ function Check-If-Installed {
     # return $?
 
     # Если пакет найден, возвращаем True, иначе False
-    if ($InstalledApp) {
+    if ($InstalledApp != "No installed package found matching input criteria.") {
         return $true
     } else {
         return $false
@@ -90,7 +90,7 @@ function Uninstall-Package {
         if ($?) {
             Write-Output "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Output "$InstalledApp Already uninstalled."
+            Write-Output "Already uninstalled."
         } else {
             Write-Output "Failed to uninstall package $packageID."
         }
