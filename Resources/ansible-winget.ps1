@@ -29,14 +29,14 @@ function Check-If-Installed {
         [string]$packageID
     )
 
-    Write-Output "Checking $packageID..."
-    $InstalledApps = winget list $packageID
-    $InstalledApp = $InstalledApps -match $packageID
+    # Write-Output "Checking $packageID..."
+    $output = winget list $packageID
+    # $InstalledApps -match $packageID
     # Write-Output "$?"
-    # return $?
+    return $?
 
     # Если пакет найден, возвращаем True, иначе False
-    if (-not ($InstalledApp -eq -1978335212)) {
+    if ($InstalledApp) {
         return $true
     } else {
         return $false
