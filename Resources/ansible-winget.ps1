@@ -7,10 +7,6 @@
 
 param()
 
-if (platform.system.lower != 'windows') {
-    module.fail_json(msg='This module only supports Windows')
-}
-
 $spec = @{
     options = @{
         appID = @{ type = "str"; required = $true }
