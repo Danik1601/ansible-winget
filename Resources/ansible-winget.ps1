@@ -9,8 +9,10 @@ param()
 
 $spec = @{
     options = @{
-        appID = @{ type = "str" }
-        state = @{ type = "str"; choices = "absent", "present", "updated" }
+        appID = @{ type = "str"; required = $true }
+        state = @{ type = "str"; choices = "absent", "present", "updated"; required = $true }
+        # scope = @{ type = "str"; default = "user"; choices = "user", "machine" }
+        # version = @{ type = "str"}
     }
 #    required_one_of = @(, @("appID", "state"))
     supports_check_mode = $true
@@ -27,7 +29,7 @@ function Check_If_Installed {
         [string]$packageID
     )
 
-    Write-Output "Checking $packageID..."
+    # Write-Output "Checking $packageID..."
     winget list $packageID
     # return $InstalledApps -match $packageID
 }
@@ -38,7 +40,7 @@ function Check_If_Updatable {
         [string]$packageID
     )
 
-    Write-Output "Checking $packageID..."
+    # Write-Output "Checking $packageID..."
     return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
