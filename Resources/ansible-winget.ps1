@@ -53,7 +53,7 @@ function Install-Package {
     )
 
     # Write-Output "Installing package $packageID..."
-    if (Check-If-Installed -packageID $appID) {
+    if (-not (Check-If-Installed -packageID $appID)) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
             Write-Output "Package $packageID installed successfully."
@@ -89,8 +89,8 @@ function Uninstall-Package {
         }
     }
     else {
-        Write-Output "Package $packageID is already Uninstalled."
-        # return 0
+        # Write-Output "Package $packageID is already Uninstalled."
+        return 0
     }
 }
 
