@@ -7,8 +7,8 @@
 
 param()
 
-if platform.system().lower() != 'windows':
-        module.fail_json(msg='This module only supports Windows')
+if (platform.system().lower() != 'windows'):
+    module.fail_json(msg='This module only supports Windows')
 
 $spec = @{
     options = @{
@@ -51,7 +51,7 @@ function Check-If-Updatable {
     param (
         [string]$packageID
     )
-    
+
     # Write-Output "Checking $packageID..."
     return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
