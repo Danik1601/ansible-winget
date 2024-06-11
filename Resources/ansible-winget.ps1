@@ -60,7 +60,7 @@ function Install-Package {
     )
 
     # Write-Output "Installing package $packageID..."
-    if (Check-If-Installed -packageID $appID) {
+    if (-not (Check-If-Installed -packageID $appID)) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
             Write-Output "Package $packageID installed successfully."
@@ -85,7 +85,7 @@ function Uninstall-Package {
     )
 
     # Write-Output "Uninstalling package $packageID..."
-    if (-not (Check-If-Installed -packageID $appID)) {
+    if (Check-If-Installed -packageID $appID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
             Write-Output "Package $packageID uninstalled successfully."
