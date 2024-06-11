@@ -29,9 +29,9 @@ function Check-If-Installed {
         [string]$packageID
     )
 
-    # Write-Host "Checking $packageID..."
+    # Write-Verbose "Checking $packageID..."
     $output = winget list $packageID
-    # Write-Host "$?"
+    # Write-Verbose "$?"
     return $?
 
     # Если пакет найден, возвращаем True, иначе False
@@ -48,7 +48,7 @@ function Check-If-Updatable {
         [string]$packageID
     )
 
-    # Write-Host "Checking $packageID..."
+    # Write-Verbose "Checking $packageID..."
     return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
@@ -58,21 +58,21 @@ function Install-Package {
         [string]$packageID
     )
 
-    # Write-Host "Installing package $packageID..."
+    # Write-Verbose "Installing package $packageID..."
     if (-not (Check-If-Installed -packageID $appID)) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
-            Write-Host "Package $packageID installed successfully."
+            Write-Verbose "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
-            Write-Host "Already installed."
+            Write-Verbose "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Host "Already installed and upgraded."
+            Write-Verbose "Already installed and upgraded."
         } else {
-            Write-Host "Failed to install package $packageID."
+            Write-Verbose "Failed to install package $packageID."
         }
     }
     else {
-        Write-Host "Package $packageID is already Installed."
+        Write-Verbose "Package $packageID is already Installed."
         # return 0
     }
 }
@@ -83,19 +83,19 @@ function Uninstall-Package {
         [string]$packageID
     )
 
-    # Write-Host "Uninstalling package $packageID..."
+    # Write-Verbose "Uninstalling package $packageID..."
     if (Check-If-Installed -packageID $appID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
-            Write-Host "Package $packageID uninstalled successfully."
+            Write-Verbose "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Host "Already uninstalled."
+            Write-Verbose "Already uninstalled."
         } else {
-            Write-Host "Failed to uninstall package $packageID."
+            Write-Verbose "Failed to uninstall package $packageID."
         }
     }
     else {
-        Write-Host "Package $packageID is already Uninstalled."
+        Write-Verbose "Package $packageID is already Uninstalled."
         # return 0
     }
 }
@@ -106,21 +106,21 @@ function Update-Package {
         [string]$packageID
     )
     
-    # Write-Host "Updating package $packageID..."
+    # Write-Verbose "Updating package $packageID..."
     if (Check-If-Updatable -packageID $appID) {
         $output = winget update --id $packageID --silent
         if ($?) {
-            Write-Host "Package $packageID updated successfully."
+            Write-Verbose "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Host "Already updated."
+            Write-Verbose "Already updated."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Host "This package is not installed."
+            Write-Verbose "This package is not installed."
         } else {
-            Write-Host "Failed to update package $packageID."
+            Write-Verbose "Failed to update package $packageID."
         }
     }
     else {
-        Write-Host "Package $packageID is already updated."
+        Write-Verbose "Package $packageID is already updated."
         # return 0
     }
 }
@@ -135,7 +135,7 @@ if ($state -eq "present") {
 } elseif ($state -eq "updated") {
     Update-Package -packageID $appID
 } else {
-    Write-Host "Invalid state. Use 'present', 'absent' or 'updated'."
+    Write-Verbose "Invalid state. Use 'present', 'absent' or 'updated'."
 }
 
 
