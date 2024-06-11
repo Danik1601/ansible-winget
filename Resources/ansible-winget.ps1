@@ -29,9 +29,9 @@ function Check-If-Installed {
         [string]$packageID
     )
 
-    # Write-Verbose "Checking $packageID..."
+    # Write-Debug "Checking $packageID..."
     $output = winget list $packageID
-    # Write-Verbose "$?"
+    # Write-Debug "$?"
     return $?
 
     # Если пакет найден, возвращаем True, иначе False
@@ -48,7 +48,7 @@ function Check-If-Updatable {
         [string]$packageID
     )
 
-    # Write-Verbose "Checking $packageID..."
+    # Write-Debug "Checking $packageID..."
     return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
@@ -58,21 +58,21 @@ function Install-Package {
         [string]$packageID
     )
 
-    # Write-Verbose "Installing package $packageID..."
+    # Write-Debug "Installing package $packageID..."
     if (-not (Check-If-Installed -packageID $appID)) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
-            Write-Verbose "Package $packageID installed successfully."
+            Write-Debug "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
-            Write-Verbose "Already installed."
+            Write-Debug "Already installed."
         } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Verbose "Already installed and upgraded."
+            Write-Debug "Already installed and upgraded."
         } else {
-            Write-Verbose "Failed to install package $packageID."
+            Write-Debug "Failed to install package $packageID."
         }
     }
     else {
-        Write-Verbose "Package $packageID is already Installed."
+        Write-Debug "Package $packageID is already Installed."
         # return 0
     }
 }
@@ -83,19 +83,19 @@ function Uninstall-Package {
         [string]$packageID
     )
 
-    # Write-Verbose "Uninstalling package $packageID..."
+    # Write-Debug "Uninstalling package $packageID..."
     if (Check-If-Installed -packageID $appID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
-            Write-Verbose "Package $packageID uninstalled successfully."
+            Write-Debug "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Verbose "Already uninstalled."
+            Write-Debug "Already uninstalled."
         } else {
-            Write-Verbose "Failed to uninstall package $packageID."
+            Write-Debug "Failed to uninstall package $packageID."
         }
     }
     else {
-        Write-Verbose "Package $packageID is already Uninstalled."
+        Write-Debug "Package $packageID is already Uninstalled."
         # return 0
     }
 }
@@ -106,21 +106,21 @@ function Update-Package {
         [string]$packageID
     )
     
-    # Write-Verbose "Updating package $packageID..."
+    # Write-Debug "Updating package $packageID..."
     if (Check-If-Updatable -packageID $appID) {
         $output = winget update --id $packageID --silent
         if ($?) {
-            Write-Verbose "Package $packageID updated successfully."
+            Write-Debug "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
-            Write-Verbose "Already updated."
+            Write-Debug "Already updated."
         } elseif ($LASTEXITCODE -eq -1978335212) {
-            Write-Verbose "This package is not installed."
+            Write-Debug "This package is not installed."
         } else {
-            Write-Verbose "Failed to update package $packageID."
+            Write-Debug "Failed to update package $packageID."
         }
     }
     else {
-        Write-Verbose "Package $packageID is already updated."
+        Write-Debug "Package $packageID is already updated."
         # return 0
     }
 }
@@ -135,7 +135,7 @@ if ($state -eq "present") {
 } elseif ($state -eq "updated") {
     Update-Package -packageID $appID
 } else {
-    Write-Verbose "Invalid state. Use 'present', 'absent' or 'updated'."
+    Write-Debug "Invalid state. Use 'present', 'absent' or 'updated'."
 }
 
 
