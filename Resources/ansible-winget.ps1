@@ -37,7 +37,7 @@ function Check-If-Installed {
     $InstalledApp = $InstalledApps -match $packageID
     # Write-Output "$?"
     # return $?
-    
+
     # Если пакет найден, возвращаем True, иначе False
     if ($InstalledApp) {
         return $true
@@ -51,7 +51,7 @@ function Check-If-Updatable {
     param (
         [string]$packageID
     )
-
+    
     # Write-Output "Checking $packageID..."
     return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
