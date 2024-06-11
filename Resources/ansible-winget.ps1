@@ -36,7 +36,7 @@ function Check-If-Installed {
     # return $?
 
     # Если пакет найден, возвращаем True, иначе False
-    if ($InstalledApp != "No installed package found matching input criteria.") {
+    if !($InstalledApp = "No installed package found matching input criteria.") {
         return $true
     } else {
         return $false
