@@ -32,6 +32,7 @@ function Check_If_Installed {
     # Write-Output "Checking $packageID..."
     winget list $packageID
     # return $InstalledApps -match $packageID
+    return $?
 }
 
 # Функция для проверки наличия обновления через Winget
