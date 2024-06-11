@@ -7,7 +7,7 @@
 
 param()
 
-if (platform.system().lower() != 'windows'):
+if (platform.system.lower() != 'windows'):
     module.fail_json(msg='This module only supports Windows')
 
 $spec = @{
