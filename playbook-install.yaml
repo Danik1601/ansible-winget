@@ -1,0 +1,14 @@
+---
+- name: Manage applications using Winget
+  hosts: all
+  gather_facts: false
+
+
+  tasks:
+  
+    - name: Install 7zip
+      ansible-winget:
+        state: present
+        appID: 7zip.7zip
+      async: 360
+      poll: 15
