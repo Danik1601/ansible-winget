@@ -37,7 +37,7 @@ function Check-If-Installed {
     $InstalledApp = $InstalledApps -match $packageID
     # Write-Output "$?"
     # return $?
-
+    
     # Если пакет найден, возвращаем True, иначе False
     if ($InstalledApp) {
         return $true
