@@ -31,7 +31,6 @@ function Check-If-Installed {
 
     # Write-Output "Checking $packageID..."
     $output = winget list $packageID
-    # $InstalledApps -match $packageID
     # Write-Output "$?"
     return $?
 
