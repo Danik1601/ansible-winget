@@ -89,8 +89,8 @@ function Uninstall-Package {
         }
     }
     else {
-        # Write-Output "Package $packageID is already Uninstalled."
-        return 0
+        Write-Output "Package $packageID is already Uninstalled."
+        # return 0
     }
 }
 
