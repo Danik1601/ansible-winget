@@ -37,7 +37,7 @@ function Check-If-Installed {
 }
 
 # Функция для проверки наличия обновления через Winget
-function Check_If_Updatable {
+function Check-If-Updatable {
     param (
         [string]$packageID
     )
@@ -78,7 +78,7 @@ function Uninstall-Package {
     )
 
     # Write-Output "Uninstalling package $packageID..."
-    if (Check_If_Installed -packageID $appID) {
+    if (Check-If-Installed -packageID $appID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
             Write-Output "Package $packageID uninstalled successfully."
@@ -101,7 +101,7 @@ function Update-Package {
     )
     
     # Write-Output "Updating package $packageID..."
-    if (Check_If_Updatable -packageID $appID) {
+    if (Check-If-Updatable -packageID $appID) {
         $output = winget update --id $packageID --silent
         if ($?) {
             Write-Output "Package $packageID updated successfully."
