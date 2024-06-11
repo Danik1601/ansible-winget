@@ -8,7 +8,7 @@
   
     - name: Uninstall 7zip
       ansible-winget:
-        state: asbcent
+        state: absent
         appID: 7zip.7zip
       async: 360
       poll: 15
