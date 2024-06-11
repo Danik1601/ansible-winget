@@ -10,5 +10,3 @@
       ansible-winget:
         state: update
         appID: 7zip.7zip
-      async: 360
-      poll: 15

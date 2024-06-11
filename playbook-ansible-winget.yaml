@@ -10,19 +10,13 @@
       ansible-winget:
         state: present
         appID: 7zip.7zip
-      async: 360
-      poll: 15
 
     - name: Uninstall Git
       ansible-winget:
         state: absent
         appID: Git.Git
-      async: 360
-      poll: 15
 
     - name: Update Mozilla Thunderbird
       ansible-winget:
         state: updated
         appID: Mozilla.Thunderbird
-      async: 360
-      poll: 15
