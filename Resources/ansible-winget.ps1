@@ -7,6 +7,9 @@
 
 param()
 
+if platform.system().lower() != 'windows':
+        module.fail_json(msg='This module only supports Windows')
+
 $spec = @{
     options = @{
         appID = @{ type = "str"; required = $true }
@@ -30,7 +33,9 @@ function Check-If-Installed {
     )
 
     Write-Output "Checking $packageID..."
-    winget list $packageID
+    $InstalledApp = winget list $packageID
+
+
     # return $InstalledApps -match $packageID
     Write-Output "$?"
     return $?
