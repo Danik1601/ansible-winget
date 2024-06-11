@@ -24,7 +24,7 @@ $spec = @{
     $state = $module.Params.state
 
 # Функция для проверки наличия приложения через Winget
-function Check_If_Installed {
+function Check-If-Installed {
     param (
         [string]$packageID
     )
@@ -32,6 +32,7 @@ function Check_If_Installed {
     Write-Output "Checking $packageID..."
     winget list $packageID
     # return $InstalledApps -match $packageID
+    Write-Output "$?"
     return $?
 }
 
@@ -52,7 +53,7 @@ function Install-Package {
     )
 
     # Write-Output "Installing package $packageID..."
-    if (Check_If_Installed -packageID $appID) {
+    if (Check-If-Installed -packageID $appID) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
             Write-Output "Package $packageID installed successfully."
