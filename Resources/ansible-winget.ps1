@@ -11,7 +11,7 @@ $spec = @{
     options = @{
         appID = @{ type = "str"; required = $true }
         state = @{ type = "str"; choices = "absent", "present", "updated"; required = $true }
-        # scope = @{ type = "str"; default = "user"; choices = "user", "machine" }
+        # scope = @{ type = "str"; choices = "user", "machine" }
         # version = @{ type = "str"}
     }
 #    required_one_of = @(, @("appID", "state"))
@@ -22,6 +22,8 @@ $spec = @{
 
     $appID = $module.Params.appID
     $state = $module.Params.state
+    # $scope = $module.Params.scope
+    # $version = $module.Params.version
 
 # Функция для проверки наличия приложения через Winget
 function Check-If-Installed {
@@ -124,7 +126,7 @@ if ($state -eq "present") {
 } elseif ($state -eq "updated") {
     Update-Package -packageID $appID
 } else {
-    Write-Verbose "Invalid state. Use 'present', 'absent' or 'updated'."
+    Write-Host "Invalid state. Use 'present', 'absent' or 'updated'."
 }
 
 
