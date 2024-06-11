@@ -78,7 +78,7 @@ function Uninstall-Package {
     )
 
     # Write-Output "Uninstalling package $packageID..."
-    if (-not (Check-If-Installed -packageID $appID)) {
+    if (Check-If-Installed -packageID $appID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
             Write-Output "Package $packageID uninstalled successfully."
