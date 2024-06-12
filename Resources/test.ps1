@@ -34,7 +34,6 @@ function Check_If_Installed {
 
     Write-Verbose "Checking $packageID..."
     $command = "winget list $packageID"
-    Invoke-Command -Command $command
     return $?
 }
 
