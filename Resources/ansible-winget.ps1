@@ -61,7 +61,7 @@ function Build_Command {
     $null {Write-Host "Error. State must not be NULL"}
     present { $process = "install" }
     absent { $process = "uninstall" }
-    update { $process = "updated" }
+    updated { $process = "updated" }
     else { Write-Host "Invalid state. Use 'present', 'absent' or 'updated'." }
     }   
 
