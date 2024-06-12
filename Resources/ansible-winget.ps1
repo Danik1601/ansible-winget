@@ -11,8 +11,8 @@ $spec = @{
     options = @{
         appID = @{ type = "str"; required = $true }
         state = @{ type = "str"; choices = "absent", "present", "updated"; required = $true }
-        # scope = @{ type = "str"; choices = "user", "machine" }
-        # version = @{ type = "str"}
+        scope = @{ type = "str"; choices = "user", "machine"; required = $false }
+        version = @{ type = "str"; required = $false }
     }
 #    required_one_of = @(, @("appID", "state"))
     supports_check_mode = $true
@@ -22,8 +22,8 @@ $spec = @{
 
     $appID = $module.Params.appID
     $state = $module.Params.state
-    # $scope = $module.Params.scope
-    # $version = $module.Params.version
+    $scope = $module.Params.scope
+    $version = $module.Params.version
 
 # Функция для проверки наличия приложения через Winget
 function Check_If_Installed {
@@ -46,15 +46,55 @@ function Check_If_Updatable {
     return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
+# Функция для формирования команды установки
+function Build_Command {
+    param (
+        [string]$packageID,
+        [string]$state,
+        [string]$scope = $null,
+        [string]$version = $null,
+        [string]$process = $null
+    )
+
+    Write-Verbose "state = $state; process = $process"
+    switch ($state) {
+    $null {Write-Host "Error. State must not be NULL"}
+    present { $process = "install" }
+    absent { $process = "uninstall" }
+    update { $process = "update" }
+    else { Write-Host "Invalid state. Use 'present', 'absent' or 'updated'." }
+    }   
+
+    $execCmd = "winget $process --id $packageID --silent"
+    if ($scope) {
+        $execCmd += " --scope $scope"
+    }
+    if ($version) {
+        $execCmd += " --version $version"
+    }
+    # if ($process = "install") {
+    #     $execCmd += " --no-upgrade "
+    # }
+    Write-Verbose "Built command: '$execCmd'"
+    return $execCmd
+}
+
 # Функция для установки приложения через Winget
 function Install-Package {
     param (
-        [string]$packageID
+        [string]$packageID,
+        [string]$state,
+        [string]$scope = $null,
+        [string]$version = $null
     )
 
     Write-Verbose "Installing package $packageID..."
     if (-not (Check_If_Installed -packageID $appID)) {
-        $output = winget install --id $packageID --silent --no-upgrade
+        Write-Verbose "Package $packageID is not installed. Installing now"
+        # $installCmd = "winget install --id $packageID --silent --no-upgrade"
+        # $installCmd = { "winget install --id $packageID --silent --no-upgrade" } 
+        $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
+        $output = Invoke-Expression $execution_command
         if ($?) {
             Write-Verbose "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
@@ -62,10 +102,9 @@ function Install-Package {
         } elseif ($LASTEXITCODE -eq -1978335189) {
             Write-Verbose "Already installed and upgraded."
         } else {
-            Write-Verbose "Failed to install package $packageID."
+            Write-Host "Failed to install package $packageID."
         }
-    }
-    else {
+    } else {
         Write-Verbose "Package $packageID is already Installed."
     }
 }
@@ -73,21 +112,25 @@ function Install-Package {
 # Функция для удаления приложения через Winget
 function Uninstall-Package {
     param (
-        [string]$packageID
+        [string]$packageID,
+        [string]$state,
+        [string]$scope = $null,
+        [string]$version = $null
     )
 
     Write-Verbose "Uninstalling package $packageID..."
     if (Check_If_Installed -packageID $appID) {
-        $output = winget uninstall --id $packageID --silent
+        Write-Verbose "Package $packageID is installed. Uninstalling now"
+        $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
+        $output = Invoke-Expression $execution_command
         if ($?) {
             Write-Verbose "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
             Write-Verbose "Already uninstalled."
         } else {
-            Write-Verbose "Failed to uninstall package $packageID."
+            Write-Host "Failed to uninstall package $packageID."
         }
-    }
-    else {
+    } else {
         Write-Verbose "Package $packageID is already Uninstalled."
     }
 }
@@ -95,12 +138,17 @@ function Uninstall-Package {
 # Функция для обновления приложения через Winget
 function Update-Package {
     param (
-        [string]$packageID
+        [string]$packageID,
+        [string]$state,
+        [string]$scope = $null,
+        [string]$version = $null
     )
     
     Write-Verbose "Updating package $packageID..."
     if (Check-If-Updatable -packageID $appID) {
-        $output = winget update --id $packageID --silent
+        Write-Verbose "Package $packageID in not updated. Updating now"
+        $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
+        $output = Invoke-Expression $execution_command
         if ($?) {
             Write-Verbose "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
@@ -108,23 +156,20 @@ function Update-Package {
         } elseif ($LASTEXITCODE -eq -1978335212) {
             Write-Verbose "This package is not installed."
         } else {
-            Write-Verbose "Failed to update package $packageID."
+            Write-Host "Failed to update package $packageID."
         }
-    }
-    else {
+    } else {
         Write-Verbose "Package $packageID is already updated."
     }
 }
 
-
-
-# Запуск функций в сответствии с переданными параметрами
+# Запуск функций в соответствии с переданными параметрами
 if ($state -eq "present") {
-    Install-Package -packageID $appID
+    Install-Package -packageID $appID -state $state -scope $scope -version $version
 } elseif ($state -eq "absent") {
-    Uninstall-Package -packageID $appID
+    Uninstall-Package -packageID $appID -state $state -scope $scope -version $version
 } elseif ($state -eq "updated") {
-    Update-Package -packageID $appID
+    Update-Package -packageID $appID -state $state -scope $scope -version $version
 } else {
     Write-Host "Invalid state. Use 'present', 'absent' or 'updated'."
 }
