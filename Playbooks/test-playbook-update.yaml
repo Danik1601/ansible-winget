@@ -10,3 +10,6 @@
       test:
         state: updated
         appID: Microsoft.PowerToys
+        architecture: x64
+        scope: user
+        version: 0.81.0

@@ -10,3 +10,4 @@
       test:
         state: absent
         appID: Microsoft.PowerToys
+        scope: user
