@@ -10,4 +10,5 @@
       test:
         state: update
         appID: Microsoft.PowerToys
-        scope: machine
+        scope: user
+        version: 0.81.0

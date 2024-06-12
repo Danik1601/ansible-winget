@@ -10,5 +10,7 @@
       test:
         state: present
         appID: Microsoft.PowerToys
-        scope: machine
+        scope: user
+        version: 0.80.0
+
 

@@ -10,5 +10,7 @@
       test:
         state: absent
         appID: Microsoft.PowerToys
-        scope: machine
+        scope: user
+        version: 0.79.0
+
 
