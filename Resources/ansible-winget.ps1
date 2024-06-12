@@ -26,7 +26,7 @@ $spec = @{
     # $version = $module.Params.version
 
 # Функция для проверки наличия приложения через Winget
-function Check-If-Installed {
+function Check_If_Installed {
     param (
         [string]$packageID
     )
@@ -37,7 +37,7 @@ function Check-If-Installed {
 }
 
 # Функция для проверки наличия обновления через Winget
-function Check-If-Updatable {
+function Check_If_Updatable {
     param (
         [string]$packageID
     )
@@ -53,7 +53,7 @@ function Install-Package {
     )
 
     Write-Verbose "Installing package $packageID..."
-    if (-not (Check-If-Installed -packageID $appID)) {
+    if (-not (Check_If_Installed -packageID $appID)) {
         $output = winget install --id $packageID --silent --no-upgrade
         if ($?) {
             Write-Verbose "Package $packageID installed successfully."
@@ -77,7 +77,7 @@ function Uninstall-Package {
     )
 
     Write-Verbose "Uninstalling package $packageID..."
-    if (Check-If-Installed -packageID $appID) {
+    if (Check_If_Installed -packageID $appID) {
         $output = winget uninstall --id $packageID --silent
         if ($?) {
             Write-Verbose "Package $packageID uninstalled successfully."
