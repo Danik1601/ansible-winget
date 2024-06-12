@@ -45,7 +45,7 @@ function Check_If_Updatable {
     )
 
     Write-Verbose "Checking $packageID..."
-    return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
+    return (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
 # Функция для формирования команды
