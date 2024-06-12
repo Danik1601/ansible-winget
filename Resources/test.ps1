@@ -91,8 +91,6 @@ function Install-Package {
     Write-Verbose "Installing package $packageID..."
     if (-not (Check_If_Installed -packageID $appID)) {
         Write-Verbose "Package $packageID is not installed. Installing now"
-        # $installCmd = "winget install --id $packageID --silent --no-upgrade"
-        # $installCmd = { "winget install --id $packageID --silent --no-upgrade" } 
         $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
         $output = Invoke-Expression $execution_command
         if ($?) {
