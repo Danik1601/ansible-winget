@@ -10,8 +10,8 @@ param()
 $spec = @{
     options = @{
         appID = @{ type = "str"; required = $true }
-        state = @{ type = "str"; choices = "absent", "present", "updated"; required = $true }
-        scope = @{ type = "str"; choices = "user", "machine"; required = $false }
+        state = @{ type = "str"; choices = @("absent", "present", "updated"); required = $true }
+        scope = @{ type = "str"; choices = @("user", "machine"); required = $false }
         version = @{ type = "str"; required = $false }
     }
     supports_check_mode = $true
@@ -21,48 +21,59 @@ $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
 $appID = $module.Params.appID
 $state = $module.Params.state
-$scope = if ($module.Params.ContainsKey('scope')) { $module.Params.scope } else { $null }
-$version = if ($module.Params.ContainsKey('version')) { $module.Params.version } else { $null }
+$scope = $module.Params.scope
+$version = $module.Params.version
+
+# Функция для получения параметров scope и version
+function Get-Params {
+    param (
+        [string]$scope,
+        [string]$version
+    )
+
+    $scopeParam = if ($scope) { "--scope $scope" } else { "" }
+    $versionParam = if ($version) { "--version $version" } else { "" }
+    
+    return @{ scopeParam = $scopeParam; versionParam = $versionParam }
+}
 
 # Функция для проверки наличия приложения через Winget
 function Check_If_Installed {
     param (
-        [string]$packageID
+        [string]$packageID,
+        [string]$scope
     )
 
     Write-Verbose "Checking $packageID..."
-    $output = winget list $packageID
+    $params = Get-Params -scope $scope
+    $output = winget list $packageID $params.scopeParam
     return $?
 }
 
 # Функция для проверки наличия обновления через Winget
 function Check_If_Updatable {
     param (
-        [string]$packageID
+        [string]$packageID,
+        [string]$scope
     )
 
     Write-Verbose "Checking $packageID..."
-    return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
+    $params = Get-Params -scope $scope
+    return [int64] (winget list --id $packageID $params.scopeParam | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
 # Функция для установки приложения через Winget
 function Install-Package {
     param (
         [string]$packageID,
-        [string]$scope = $null,
-        [string]$version = $null
+        [string]$scope,
+        [string]$version
     )
 
     Write-Verbose "Installing package $packageID..."
-    if (-not (Check_If_Installed -packageID $appID)) {
-        $installCmd = "winget install --id $packageID --silent --no-upgrade"
-        if ($scope) {
-            $installCmd += " --scope $scope"
-        }
-        if ($version) {
-            $installCmd += " --version $version"
-        }
-        $output = Invoke-Expression $installCmd
+    if (-not (Check_If_Installed -packageID $appID -scope $scope)) {
+        $params = Get-Params -scope $scope -version $version
+        $output = winget install --id $packageID --silent --no-upgrade $params.scopeParam $params.versionParam
         if ($?) {
             Write-Verbose "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
@@ -72,20 +83,23 @@ function Install-Package {
         } else {
             Write-Verbose "Failed to install package $packageID."
         }
-    } else {
-        Write-Verbose "Package $packageID is already Installed."
+    }
+    else {
+        Write-Verbose "Package $packageID is already installed."
     }
 }
 
 # Функция для удаления приложения через Winget
 function Uninstall-Package {
     param (
-        [string]$packageID
+        [string]$packageID,
+        [string]$scope
     )
 
     Write-Verbose "Uninstalling package $packageID..."
-    if (Check_If_Installed -packageID $appID) {
-        $output = winget uninstall --id $packageID --silent
+    if (Check_If_Installed -packageID $appID -scope $scope) {
+        $params = Get-Params -scope $scope
+        $output = winget uninstall --id $packageID --silent $params.scopeParam
         if ($?) {
             Write-Verbose "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
@@ -93,20 +107,23 @@ function Uninstall-Package {
         } else {
             Write-Verbose "Failed to uninstall package $packageID."
         }
-    } else {
-        Write-Verbose "Package $packageID is already Uninstalled."
+    }
+    else {
+        Write-Verbose "Package $packageID is already uninstalled."
     }
 }
 
 # Функция для обновления приложения через Winget
 function Update-Package {
     param (
-        [string]$packageID
+        [string]$packageID,
+        [string]$scope
     )
     
     Write-Verbose "Updating package $packageID..."
-    if (Check-If-Updatable -packageID $appID) {
-        $output = winget update --id $packageID --silent
+    if (Check_If_Updatable -packageID $appID -scope $scope) {
+        $params = Get-Params -scope $scope
+        $output = winget update --id $packageID --silent $params.scopeParam
         if ($?) {
             Write-Verbose "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
@@ -116,7 +133,8 @@ function Update-Package {
         } else {
             Write-Verbose "Failed to update package $packageID."
         }
-    } else {
+    }
+    else {
         Write-Verbose "Package $packageID is already updated."
     }
 }
@@ -125,9 +143,9 @@ function Update-Package {
 if ($state -eq "present") {
     Install-Package -packageID $appID -scope $scope -version $version
 } elseif ($state -eq "absent") {
-    Uninstall-Package -packageID $appID
+    Uninstall-Package -packageID $appID -scope $scope
 } elseif ($state -eq "updated") {
-    Update-Package -packageID $appID
+    Update-Package -packageID $appID -scope $scope
 } else {
     Write-Host "Invalid state. Use 'present', 'absent' or 'updated'."
 }
