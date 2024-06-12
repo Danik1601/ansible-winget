@@ -16,7 +16,7 @@ $spec = @{
         version = @{ type = "str"; required = $false }
     }
 #    required_one_of = @(, @("appID", "state"))
-    supports_check_smode = $true
+    supports_check_mode = $true
 }
 
     $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
