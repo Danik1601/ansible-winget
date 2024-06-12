@@ -8,5 +8,5 @@
   
     - name: Update 7zip
       ansible-winget:
-        state: update
+        state: updated
         appID: 7zip.7zip

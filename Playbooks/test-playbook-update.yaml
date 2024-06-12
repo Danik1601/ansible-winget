@@ -8,7 +8,7 @@
   
     - name: Update Microsoft PowerToys
       test:
-        state: update
+        state: updated
         appID: Microsoft.PowerToys
         scope: user
         version: 0.81.0
