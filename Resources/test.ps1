@@ -15,7 +15,6 @@ $spec = @{
         scope = @{ type = "str"; choices = "user", "machine"; required = $false }
         version = @{ type = "str"; required = $false }
     }
-#    required_one_of = @(, @("appID", "state"))
     supports_check_mode = $true
 }
 
