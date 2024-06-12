@@ -11,17 +11,19 @@ $spec = @{
     options = @{
         appID = @{ type = "str"; required = $true }
         state = @{ type = "str"; choices = "absent", "present", "updated"; required = $true }
+        architechure = @{ type ="str"; choices = "x64", "x86", "arm64"; required = $false }
         scope = @{ type = "str"; choices = "user", "machine"; required = $false }
         version = @{ type = "str"; required = $false }
     }
 #    required_one_of = @(, @("appID", "state"))
-    supports_check_mode = $true
+    supports_check_smode = $true
 }
 
     $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
     $appID = $module.Params.appID
     $state = $module.Params.state
+    $architechure =  $architechure.Params.versions
     $scope = $module.Params.scope
     $version = $module.Params.version
 
@@ -51,6 +53,7 @@ function Build_Command {
     param (
         [string]$packageID,
         [string]$state,
+        [string]$architecture = $null,
         [string]$scope = $null,
         [string]$version = $null,
         [string]$process = $null
@@ -66,15 +69,15 @@ function Build_Command {
     }   
 
     $execCmd = "winget $process --id $packageID --silent"
+    if ($architecture) {
+        $execCmd += " --architecture $architecture "
+    }
     if ($scope) {
         $execCmd += " --scope $scope"
     }
     if ($version) {
         $execCmd += " --version $version"
     }
-    # if ($process = "install") {
-    #     $execCmd += " --no-upgrade "
-    # }
     Write-Verbose "Built command: '$execCmd'"
     return $execCmd
 }
@@ -84,6 +87,7 @@ function Install-Package {
     param (
         [string]$packageID,
         [string]$state,
+        [string]$architecture = $null,
         [string]$scope = $null,
         [string]$version = $null
     )
@@ -91,7 +95,7 @@ function Install-Package {
     Write-Verbose "Installing package $packageID..."
     if (-not (Check_If_Installed -packageID $appID)) {
         Write-Verbose "Package $packageID is not installed. Installing now"
-        $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
+        $execution_command = Build_Command -packageID $packageID -state $state -architecture $architecture -scope $scope -version $version
         $output = Invoke-Expression $execution_command
         if ($?) {
             Write-Verbose "Package $packageID installed successfully."
@@ -138,6 +142,7 @@ function Update-Package {
     param (
         [string]$packageID,
         [string]$state,
+        [string]$architecture = $null,
         [string]$scope = $null,
         [string]$version = $null
     )
@@ -145,7 +150,7 @@ function Update-Package {
     Write-Verbose "Updating package $packageID..."
     if (Check_If_Updatable -packageID $appID) {
         Write-Verbose "Package $packageID in not updated. Updating now"
-        $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
+        $execution_command = Build_Command -packageID $packageID -state $state -architecture $architecture -scope $scope -version $version
         $output = Invoke-Expression $execution_command
         if ($?) {
             Write-Verbose "Package $packageID updated successfully."
@@ -163,15 +168,13 @@ function Update-Package {
 
 # Запуск функций в соответствии с переданными параметрами
 if ($state -eq "present") {
-    Install-Package -packageID $appID -state $state -scope $scope -version $version
+    Install-Package -packageID $appID -state $state -architecture $architecture -scope $scope -version $version
 } elseif ($state -eq "absent") {
-    Uninstall-Package -packageID $appID -state $state -scope $scope -version $version
+    Uninstall-Package -packageID $appID -state $state -scope $scope -version $versions
 } elseif ($state -eq "updated") {
-    Update-Package -packageID $appID -state $state -scope $scope -version $version
+    Update-Package -packageID $appID -state $state -architecture $architecture -scope $scope -version $version
 } else {
     Write-Host "Invalid state. Use 'present', 'absent' or 'updated'."
 }
-
-
 
 $module.ExitJson()
