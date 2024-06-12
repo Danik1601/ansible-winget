@@ -145,7 +145,7 @@ function Update-Package {
     )
     
     Write-Verbose "Updating package $packageID..."
-    if (Check-If-Updatable -packageID $appID) {
+    if (Check_If_Updatable -packageID $appID) {
         Write-Verbose "Package $packageID in not updated. Updating now"
         $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
         $output = Invoke-Expression $execution_command
