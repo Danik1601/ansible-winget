@@ -33,7 +33,8 @@ function Check_If_Installed {
     )
 
     Write-Verbose "Checking $packageID..."
-    $output = winget list $packageID
+    $command = winget list $packageID
+    Invoke-Expression $command
     return $?
 }
 
@@ -94,8 +95,8 @@ function Install-Package {
     Write-Verbose "Installing package $packageID..."
     if (-not (Check_If_Installed -packageID $appID)) {
         Write-Verbose "Package $packageID is not installed. Installing now"
-        $execution_command = Build_Command -packageID $packageID -state $state -architecture $architecture -scope $scope -version $version
-        $output = Invoke-Expression $execution_command
+        $command = Build_Command -packageID $packageID -state $state -architecture $architecture -scope $scope -version $version
+        Invoke-Expression $command
         if ($?) {
             Write-Verbose "Package $packageID installed successfully."
         } elseif ($LASTEXITCODE -eq -1978335135) {
@@ -122,8 +123,8 @@ function Uninstall-Package {
     Write-Verbose "Uninstalling package $packageID..."
     if (Check_If_Installed -packageID $appID) {
         Write-Verbose "Package $packageID is installed. Uninstalling now"
-        $execution_command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
-        $output = Invoke-Expression $execution_command
+        $command = Build_Command -packageID $packageID -state $state -scope $scope -version $version
+        Invoke-Expression $command
         if ($?) {
             Write-Verbose "Package $packageID uninstalled successfully."
         } elseif ($LASTEXITCODE -eq -1978335212) {
@@ -149,8 +150,8 @@ function Update-Package {
     Write-Verbose "Updating package $packageID..."
     if (Check_If_Updatable -packageID $appID) {
         Write-Verbose "Package $packageID in not updated. Updating now"
-        $execution_command = Build_Command -packageID $packageID -state $state -architecture $architecture -scope $scope -version $version
-        $output = Invoke-Expression $execution_command
+        $command = Build_Command -packageID $packageID -state $state -architecture $architecture -scope $scope -version $version
+        Invoke-Expression $command
         if ($?) {
             Write-Verbose "Package $packageID updated successfully."
         } elseif ($LASTEXITCODE -eq -1978335189) {
