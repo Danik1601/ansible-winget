@@ -23,7 +23,7 @@ $spec = @{
 
     $appID = $module.Params.appID
     $state = $module.Params.state
-    $architecture =  $architecture.Params.versions
+    $architecture =  $module.Params.architecture
     $scope = $module.Params.scope
     $version = $module.Params.version
 
