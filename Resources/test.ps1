@@ -46,7 +46,7 @@ function Check_If_Updatable {
     return [int64] (winget list --id $packageID | Select-String '\bVersion\s+Available\b' -Quiet)
 }
 
-# Функция для формирования команды установки
+# Функция для формирования команды
 function Build_Command {
     param (
         [string]$packageID,
