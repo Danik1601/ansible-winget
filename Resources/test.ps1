@@ -11,7 +11,7 @@ $spec = @{
     options = @{
         appID = @{ type = "str"; required = $true }
         state = @{ type = "str"; choices = "absent", "present", "updated"; required = $true }
-        architechure = @{ type ="str"; choices = "x64", "x86", "arm64"; required = $false }
+        architecture = @{ type ="str"; choices = "x64", "x86", "arm64"; required = $false }
         scope = @{ type = "str"; choices = "user", "machine"; required = $false }
         version = @{ type = "str"; required = $false }
     }
@@ -23,7 +23,7 @@ $spec = @{
 
     $appID = $module.Params.appID
     $state = $module.Params.state
-    $architechure =  $architechure.Params.versions
+    $architecture =  $architecture.Params.versions
     $scope = $module.Params.scope
     $version = $module.Params.version
 
