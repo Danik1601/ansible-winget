@@ -1,0 +1,14 @@
+---
+- name: Manage applications using Winget
+  hosts: all
+  gather_facts: false
+
+
+  tasks:
+  
+    - name: Install Microsoft PowerToys
+      test:
+        state: present
+        appID: Microsoft.PowerToys
+        scope: machine
+

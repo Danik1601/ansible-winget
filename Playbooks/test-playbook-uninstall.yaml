@@ -1,0 +1,14 @@
+---
+- name: Manage applications using Winget
+  hosts: all
+  gather_facts: false
+
+
+  tasks:
+  
+    - name: Uninstall Microsoft PowerToys
+      test:
+        state: absent
+        appID: Microsoft.PowerToys
+        scope: machine
+

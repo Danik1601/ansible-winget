@@ -1,0 +1,13 @@
+---
+- name: Manage applications using Winget
+  hosts: all
+  gather_facts: false
+
+
+  tasks:
+  
+    - name: Update Microsoft PowerToys
+      test:
+        state: update
+        appID: Microsoft.PowerToys
+        scope: machine
