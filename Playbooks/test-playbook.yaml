@@ -9,3 +9,10 @@
       ansible-winget:
         appID: Google.Chrome
         state: present
+
+        - name: Install 7zip.7zip
+      ansible-winget:
+        appID: 7zip.7zip
+        state: present
+        version: 21.06
+
