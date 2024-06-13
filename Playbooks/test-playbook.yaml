@@ -9,5 +9,3 @@
       ansible-winget:
         appID: Google.Chrome
         state: present
-        version: 123.0.6312.106
-
