@@ -8,15 +8,25 @@
   
     - name: Install 7zip
       ansible-winget:
-        state: absent
+        state: present
         appID: 7zip.7zip
+        version: 23.01
 
     - name: Uninstall Git
       ansible-winget:
-        state: present
+        state: absent
         appID: Git.Git
+        scope: machine
 
     - name: Update Mozilla Thunderbird
       ansible-winget:
         state: updated
         appID: Mozilla.Thunderbird
+        architecture: x64
+        scope: machine
+
+    - name: Uninstall VLC media player
+      ansible-winget:
+        appID: VideoLAN.VLC
+        state: absent
+        scope: machine
