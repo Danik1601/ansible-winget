@@ -19,3 +19,4 @@
       ansible-winget:
         appID: Mozilla.Thunderbird
         state: absent
+        scope: machine
