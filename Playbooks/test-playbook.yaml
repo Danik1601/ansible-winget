@@ -11,7 +11,7 @@
     appID: VideoLAN.VLC
     state: present
     architecture: x64
-    scope: user
+    scope: machine
     version: 3.0.20
 
 # Update an application
@@ -20,12 +20,12 @@
     appID: VideoLAN.VLC
     state: updated
     architecture: x64
-    scope: user
-    version: 3.0.20
+    scope: machine
 
     # Uninstall an application
 - name: Uninstall VLC media player
   ansible-winget:
     appID: VideoLAN.VLC
     state: absent
-    scope: user
+    scope: machine
+    version: 3.0.20
