@@ -9,16 +9,11 @@
       ansible-winget:
         appID: VideoLAN.VLC
         state: absent
-        architecture: x64
-        scope: machine
-        version: 3.0.19
 
     - name: Update VLC media player
       ansible-winget:
         appID: 7zip.7zip
         state: absent
-        architecture: x64
-        scope: machine
 
     - name: Uninstall VLC media player
       ansible-winget:
