@@ -1,0 +1,31 @@
+---
+- name: Manage applications using Winget
+  hosts: all
+  gather_facts: false
+
+  tasks:
+
+# Install an application
+- name: Install VLC media player
+  ansible-winget:
+    appID: VideoLAN.VLC
+    state: present
+    architecture: x64
+    scope: user
+    version: 3.0.20
+
+# Update an application
+- name: Update VLC media player
+  ansible-winget:
+    appID: VideoLAN.VLC
+    state: updated
+    architecture: x64
+    scope: user
+    version: 3.0.20
+
+    # Uninstall an application
+- name: Uninstall VLC media player
+  ansible-winget:
+    appID: VideoLAN.VLC
+    state: absent
+    scope: user
