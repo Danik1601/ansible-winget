@@ -5,9 +5,9 @@
 
   tasks:
   
-    - name: Uninstall VLC media player
+    - name: Install Google.Chrome
       ansible-winget:
-        appID: VideoLAN.VLC
-        state: absent
+        appID: Google.Chrome
+        state: present
         version: 123.0.6312.106
 
