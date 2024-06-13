@@ -5,17 +5,17 @@
 
   tasks:
   
-    - name: Install VLC media player
+    - name: Uninstall VLC media player
       ansible-winget:
         appID: VideoLAN.VLC
         state: absent
 
-    - name: Update VLC media player
+    - name: Uninstall 7zip.7zip
       ansible-winget:
         appID: 7zip.7zip
         state: absent
 
-    - name: Uninstall VLC media player
+    - name: Uninstall Mozilla.Thunderbird
       ansible-winget:
         appID: Mozilla.Thunderbird
         state: absent
