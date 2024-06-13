@@ -28,5 +28,5 @@
     - name: Uninstall VLC media player
       ansible-winget:
         appID: VideoLAN.VLC
-        state: absent
+        state: present
         scope: machine
