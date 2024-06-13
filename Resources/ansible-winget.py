@@ -5,7 +5,7 @@
 # Copyright: (c) 2024, Daniil Grigoryan
 # Copyright: (c) 2024, Ansible Project
 # Copyright: (c) 2024, Microsoft Inc.
-# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v2.0 (see LICENSE or https://www.gnu.org/licenses/gpl-2.0.txt)
 
 # This Ansible module manages applications via Winget on a managed Windows node
 
