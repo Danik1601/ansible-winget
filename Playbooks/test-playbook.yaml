@@ -10,7 +10,7 @@
         appID: Google.Chrome
         state: present
 
-      - name: Install 7zip.7zip
+    - name: Install 7zip.7zip
       ansible-winget:
         appID: 7zip.7zip
         state: present
