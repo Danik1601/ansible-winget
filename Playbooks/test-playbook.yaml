@@ -20,7 +20,7 @@
         appID: VideoLAN.VLC
         state: absent
 
-    - name: Install Mozilla Firefox
+    - name: Install Mozilla Thunderbird
       ansible-winget:
-        appID: Mozilla.Firefox.VLC
+        appID: Mozilla.Thunderbird
         state: present
