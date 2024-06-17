@@ -5,13 +5,22 @@
 
   tasks:
   
-    - name: Install Google.Chrome
+    - name: Install Git
       ansible-winget:
-        appID: Google.Chrome
+        appID: Git.Git
         state: present
 
-    - name: Update 7zip.7zip
+    - name: Uninstall 7zip
       ansible-winget:
         appID: 7zip.7zip
-        state: updated
+        state: absent
 
+    - name: Uninstall VLC
+      ansible-winget:
+        appID: VideoLAN.VLC
+        state: absent
+
+    - name: Install Mozilla Firefox
+      ansible-winget:
+        appID: Mozilla.Firefox.VLC
+        state: absent
