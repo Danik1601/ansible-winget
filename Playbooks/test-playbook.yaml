@@ -23,4 +23,4 @@
     - name: Install Mozilla Firefox
       ansible-winget:
         appID: Mozilla.Firefox.VLC
-        state: absent
+        state: present
