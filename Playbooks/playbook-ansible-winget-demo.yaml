@@ -1,0 +1,26 @@
+---
+- name: Manage applications using Winget
+  hosts: all
+  gather_facts: false
+
+
+  tasks:
+  
+    - name: Install VLC media player
+      ansible-winget:
+        state: present
+        appID: VideoLAN.VLC
+        architecture: x64
+        scope: machine
+        version: 3.0.20
+
+    - name: Uninstall Git
+      ansible-winget:
+        state: absent
+        appID: Git.Git
+        scope: machine
+
+    - name: Update Mozilla Thunderbird
+      ansible-winget:
+        state: updated
+        appID: Mozilla.Thunderbird
