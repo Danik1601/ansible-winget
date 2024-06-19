@@ -3,7 +3,6 @@
   hosts: all
   gather_facts: false
 
-
   tasks:
   
     - name: Install VLC media player
